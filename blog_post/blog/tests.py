@@ -34,7 +34,7 @@ class TestView(TestCase):
         soup = BeautifulSoup(response.content, 'html.parser')
         title = soup.title
 
-        self.assertEqual(title.text, 'Im_HNR')
+        self.assertEqual(title.text, 'BLOG')
 
         self.check_navbar(soup)
 
