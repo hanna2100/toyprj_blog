@@ -175,7 +175,7 @@ class TestView(TestCase):
 
         #태그가 있는지 확안해보기 위해
         post_card_000 = main_div.find('div', id='post-card-{}'.format(post_000.pk))
-        self.asserIn('#django', post_card_000.text)
+        self.assertIn('#django', post_card_000.text)
 
     #포스트 상세보기를 눌렀을 때
     def test_post_detail(self):
@@ -221,7 +221,7 @@ class TestView(TestCase):
 
         #태그가 있는지 확안해보기 위해
         post_card_000 = main_div.find('div', id='post-card-{}'.format(post_000.pk))
-        self.assertIn('#django', post_card_000.text)
+        self.assertIn('django', post_card_000.text)
 
 
 
