@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}BLOG{% endblock %}</title>
+        <title>{% block title %}Blog{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <link
@@ -103,7 +103,7 @@
         <div class="container">
             <div class="row">
                 <!-- Blog Entries Column -->
-                <div class="col-md-8" id='main_div'>
+                <div class="col-md-8" id='main-div'>
                     <h1>Post관리용 서버</h1>
 
                     {% block content%}
@@ -112,7 +112,7 @@
                 </div>
 
                 <!-- Sidebar Widgets Column -->
-                <div class="col-md-4" id='side_div'>
+                <div class="col-md-4" id='side-div'>
 
                     <!-- Search Widget -->
                     <div class="card my-4">
@@ -136,11 +136,11 @@
                                     <ul class="list-unstyled mb-0">
                                         {% for category in category_list %}
                                         <li>
-                                            <a href="#">{{ category.name }} ({{ category.post_set.count }})</a>
+                                            <a href="{{ category.get_absolute_url }}">{{ category.name }} ({{ category.post_set.count }})</a>
                                         </li>
                                         {% endfor %}
                                         <li>
-                                            <a href="#">no category ({{ posts_without_category }})</a>
+                                            <a href="/blog/category/none">no category ({{ posts_without_category }})</a>
                                         </li>
                                     </ul>
                                 </div>

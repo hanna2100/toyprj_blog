@@ -27,6 +27,32 @@ class PostDetail(DetailView):
 
         return context
 
+class PostListByCateogory(ListView):
+    
+    def get_queryset(self):
+        slug = self.kwargs['slug'] #slug 가져오기
+        if slug == '_none':
+            category = None
+        else :
+            category = Category.objects.get(slug=slug)
+
+        return Post.objects.filter(category=category).order_by('-created')
+
+    def get_context_data(self, **kwargs):
+        context = super(type(self), self).get_context_data(**kwargs)
+        context['category_list'] = Category.objects.all()
+        context['posts_without_category'] = Post.objects.filter(category=None).count()
+
+        slug = self.kwargs['slug'] #slug 가져오기
+
+        if slug == '_none':
+            context['category'] = 'no category'
+        else :
+            category = Category.objects.get(slug=slug)
+            context['category'] = category
+
+        # context['title'] = 'Blog - {}'.format(category.name)
+        return context
 
 # def post_detail(request, pk):
 #     blog_post = Post.objects.get(pk=pk)

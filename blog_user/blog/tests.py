@@ -84,7 +84,7 @@ class TestView(TestCase):
 
         body = soup.body
 
-        main_div = body.find('div', id='main_div')
+        main_div = body.find('div', id='main-div')
         self.assertIn(post_000.title, main_div.text)
         self.assertIn(post_000.author.username, main_div.text)
 
