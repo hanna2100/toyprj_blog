@@ -7,12 +7,7 @@
 {% endcomment %}
 
 {% block content %}
-    <h1 class="my-4">
-        Blog 
-        {% if category_slug %}
-            <span class="btn btn-dark btn-lg" style="cursor:auto"> {{ category }}</span>
-        {% endif %}
-    </h1>
+    <h1 class="my-4">Blog{% if category %}<span class="btn btn-dark btn-lg" style="cursor:auto"> {{ category }}</span>{% endif %}</h1>
     {% if object_list.exists %}
         {% for p in object_list %}
             <!-- Blog Post -->
