@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 # Create your models here.
 
@@ -17,7 +18,7 @@ class Category(models.Model):
     
     class Meta: #admin 페이지에서 Categorys 로 문법이 잘못 출력되는걸 고침
         verbose_name_plural = 'categories'
-        
+
     
 class Post(models.Model):
     #제목, 내용
