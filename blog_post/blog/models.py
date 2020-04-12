@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 class Category(models.Model):
     name = models.CharField(max_length=25, unique=True)
     description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
     
 class Post(models.Model):
     #제목, 내용
@@ -17,7 +20,7 @@ class Post(models.Model):
     created = models.DateTimeField()
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     #카테고리
-    category = models.Foreignkey(Category, blank=True, null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return '{} :: {}'.format(self.title, self.author)
