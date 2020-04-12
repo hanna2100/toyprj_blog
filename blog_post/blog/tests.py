@@ -193,7 +193,7 @@ class TestView(TestCase):
 
          #category_python을 누르면 해당 카테고리로 이동
         response = self.client.get(category_python.get_absolute_url())
-        self.assertIn(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
         soup = BeautifulSoup(response.content, 'html.parser')
         # self.assertEqual('Blog - {}'.format(category_python.name), soup.title.text)
@@ -222,7 +222,7 @@ class TestView(TestCase):
 
          #no category를 눌러서 /blog/category/none/ 주소를 받을 때
         response = self.client.get('/blog/category/_none/')
-        self.assertIn(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
         soup = BeautifulSoup(response.content, 'html.parser')
         # self.assertEqual('Blog - {}'.format(category_python.name), soup.title.text)
