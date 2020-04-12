@@ -14,7 +14,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return '/blog/category/{}'.format(self.slug)
+        return '/blog/category/{}/'.format(self.slug)
     
     class Meta: #admin 페이지에서 Categorys 로 문법이 잘못 출력되는걸 고침
         verbose_name_plural = 'categories'
