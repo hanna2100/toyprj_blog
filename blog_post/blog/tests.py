@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from bs4 import BeautifulSoup
-from .models import Post, Category
+from .models import Post, Category, Tag
 from django.utils import timezone
 from django.contrib.auth.models import User
 
@@ -26,6 +26,17 @@ def create_post(title, content, author, category=None):
     )
 
     return blog_post
+
+def create_tag(name='nomal_tag'):
+    tag, is_created = Tag.objects.get_or_create(
+        name = name
+    )
+    tag.slug = tag.name.replace(' ', '-').replace('/', '')
+    tag.save()
+
+    return tag
+
+
 
 class TestModel(TestCase):
     def setUp(self):
@@ -54,6 +65,35 @@ class TestModel(TestCase):
             author = self.author_000,
             category = category,
         )
+
+
+    def test_tag(self):
+        tag_000 = create_tag(name = 'django')
+        tag_001 = create_tag(name = 'jquery')
+
+        post_000 = create_post(
+            title = 'The first post',
+            content = 'Hello World. We are the world.',
+            author = self.author_000,
+        )
+        post_000.tags.add(tag_000)
+        post_000.tags.add(tag_001)
+        post_000.save()
+
+        post_001 = create_post(
+            title = 'The second post',
+            content = 'It is next Post!',
+            author = self.author_000,
+        )
+        post_001.tags.add(tag_001)
+        post_001.save()
+
+        self.assertEqual(post_000.tags.count(), 2) #post는 여러개의 tag를 가질 수 있음
+        self.assertEqual(tag_001.post_set.count(), 1)  #하나의 tag는 여러개의 post에 붙을 수 있음
+        self.assertEqual(tag_001.post_set.first(), post_000)  #하나의 tag는 자신을 가진 post들을 불러올 수 있음
+        self.assertEqual(tag_001.post_set.last(), post_001)  #하나의 tag는 자신을 가진 last을 불러올 수 있음
+
+        
 
 
 

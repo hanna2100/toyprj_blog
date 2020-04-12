@@ -19,6 +19,14 @@ class Category(models.Model):
     class Meta: #admin 페이지에서 Categorys 로 문법이 잘못 출력되는걸 고침
         verbose_name_plural = 'categories'
 
+
+class Tag(models.Model):
+    name = models.CharField(max_length=40, unique=True)
+    slug = models.SlugField(unique=True, allow_unicode=True)
+
+    def __str__(self):
+        return self.name
+
     
 class Post(models.Model):
     #제목, 내용
@@ -31,6 +39,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     #카테고리
     category = models.ForeignKey(Category, blank=True, null=True, on_delete=models.SET_NULL)
+    #tag
+    tags = models.ManyToManyField(Tag)
 
     def __str__(self):
         return '{} :: {}'.format(self.title, self.author)
