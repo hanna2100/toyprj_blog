@@ -90,7 +90,7 @@ class TestView(TestCase):
             title = 'The second post',
             content = 'It is next Post!',
             author = self.author_000,
-            category = create_category(name='python')
+            category = create_category(name='python'),
         )
 
         self.assertGreater(Post.objects.count(), 0)
@@ -108,9 +108,9 @@ class TestView(TestCase):
         #category card에서
         category_card = body.find('div', id='category-card')
         #no category(1) 있어아함
-        self.assertIn('no category(1)', category_card.text)
+        self.assertIn('no category (1)', category_card.text)
         #python(1) 있어야 함
-        self.assertIn('python(1)', category_card.text)
+        self.assertIn('python (1)', category_card.text)
         
         #main_div를 가져옴
         main_div = body.find('div', id='main_div')
