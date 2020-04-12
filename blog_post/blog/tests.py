@@ -37,7 +37,6 @@ def create_tag(name='nomal_tag'):
     return tag
 
 
-
 class TestModel(TestCase):
     def setUp(self):
         self.client = Client()
@@ -89,12 +88,9 @@ class TestModel(TestCase):
         post_001.save()
 
         self.assertEqual(post_000.tags.count(), 2) #post는 여러개의 tag를 가질 수 있음
-        self.assertEqual(tag_001.post_set.count(), 1)  #하나의 tag는 여러개의 post에 붙을 수 있음
+        self.assertEqual(tag_001.post_set.count(), 2)  #하나의 tag는 여러개의 post에 붙을 수 있음
         self.assertEqual(tag_001.post_set.first(), post_000)  #하나의 tag는 자신을 가진 post들을 불러올 수 있음
         self.assertEqual(tag_001.post_set.last(), post_001)  #하나의 tag는 자신을 가진 last을 불러올 수 있음
-
-        
-
 
 
 class TestView(TestCase):
@@ -136,12 +132,16 @@ class TestView(TestCase):
     #포스트가 1개 이상 있을 때
     def test_post_list_with_post(self):
 
+        tag_django = create_tag(name='django')
+
         #글이 생겼을 때
         post_000 = create_post(
             title = 'The first post',
             content = 'Hello World. We are the world.',
             author = self.author_000,
         )
+        post_000.tags.add(tag_django)
+        post_000.save()
         
         post_001 = create_post(
             title = 'The second post',
@@ -149,6 +149,8 @@ class TestView(TestCase):
             author = self.author_000,
             category = create_category(name='python'),
         )
+        post_001.tags.add(tag_django)
+        post_001.save()
 
         self.assertGreater(Post.objects.count(), 0)
 
@@ -171,7 +173,9 @@ class TestView(TestCase):
         #두번째 포스트에는 "no category" 있어야함
         self.assertIn('no category', main_div.text)
 
-
+        #태그가 있는지 확안해보기 위해
+        post_card_000 = main_div.find('div', id='post-card-{}'.format(post_000.pk))
+        self.asserIn('#django', post_card_000.text)
 
     #포스트 상세보기를 눌렀을 때
     def test_post_detail(self):
@@ -181,6 +185,9 @@ class TestView(TestCase):
             content = 'Hello World. We are the world.',
             author = self.author_000,
         )
+        tag_django = create_tag(name="django")
+        post_000.tags.add(tag_django)
+        post_000.save()
 
         post_001 = create_post(
             title = 'The second post',
@@ -211,6 +218,10 @@ class TestView(TestCase):
         self.assertIn(post_000.content, main_div.text)
 
         self.check_right_side(soup)
+
+        #태그가 있는지 확안해보기 위해
+        post_card_000 = main_div.find('div', id='post-card-{}'.format(post_000.pk))
+        self.asserIn('#django', post_card_000.text)
 
 
 
