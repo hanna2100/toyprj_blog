@@ -1,2 +1,5 @@
-myvenv/
-.vscoe/
+venv/
+
+.vscode/
+
+get-pip.py
