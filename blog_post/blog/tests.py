@@ -218,9 +218,9 @@ class TestView(TestCase):
         self.check_right_side(soup)
 
         #태그가 있는지 확안해보기 위해
-        post_card_000 = main_div.find('div', id='post-card-{}'.format(post_000.pk))
-        print(main_div.text)
-        self.assertIn('#django', post_card_000.text)
+        # post_card_000 = main_div.find('div', id='post-card-{}'.format(post_000.pk))
+        # print(post_card_000.text)
+        self.assertIn('#django', main_div.text)
 
 
 
@@ -280,3 +280,38 @@ class TestView(TestCase):
         main_div = soup.find('div', id='main-div')
         self.assertIn('no category', main_div.text)
         self.assertNotIn(category_python.name, main_div.text)
+
+    def test_tag_page(self):
+
+        tag_django = create_tag(name='django')
+        tag_java = create_tag(name='java')
+
+        post_000 = create_post(
+            title = 'The first post',
+            content = 'Hello World. We are the world.',
+            author = self.author_000,
+        )
+        post_000.tags.add(tag_django)
+        post_000.tags.add(tag_java)
+        post_000.save()
+
+        post_001 = create_post(
+            title = 'The second post',
+            content = 'It is next Post!',
+            author = self.author_000,
+            category = create_category(name='python'),
+        )
+        post_001.tags.add(tag_java)
+        post_001.save()
+
+        response = self.client.get(tag_django.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        main_div = soup.find('div', id='main-div')
+        h1 = main_div.find('h1', id='blog-list-title')
+        self.assertIn('#{}'.format(tag_django.name), h1.text)
+        self.assertIn(post_000.title, main_div.text)
+        self.assertNotIn(post_001.title, main_div.text)
+

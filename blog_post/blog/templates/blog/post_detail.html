@@ -1,11 +1,6 @@
 {% extends 'blog/base.html' %}
 {% block title %}{{object.title}} - Blog{% endblock %}
 {% block content %}
-{% if object_list.exists %}
-<div id='post-card-{{ object_list.fist.p.pk }}'>
-{% else %}
-<div>
-{% endif %}
     <!-- Title -->
     <h1 class="mt-4">{{ object.title }}</h1>
 
@@ -94,5 +89,4 @@
 
         </div>
     </div>
-</div>
 {% endblock %}
