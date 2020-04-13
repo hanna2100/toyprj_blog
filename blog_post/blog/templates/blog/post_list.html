@@ -11,7 +11,7 @@
     {% if object_list.exists %}
         {% for p in object_list %}
             <!-- Blog Post -->
-            <div class="card mb-4" id='blog-card-{{ p.pk }}'>
+            <div class="card mb-4" id='post-card-{{ p.pk }}'>
                 {% if p.head_image %}
                     <img class="card-img-top" src="{{ p.head_image.url }}" alt="Card image cap">
                 {% else %}
