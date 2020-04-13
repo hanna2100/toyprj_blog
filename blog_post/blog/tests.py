@@ -213,7 +213,6 @@ class TestView(TestCase):
         main_div = body.find('div', id='main-div')
         self.assertIn(post_000.title, main_div.text)
         self.assertIn(post_000.author.username, main_div.text)
-
         self.assertIn(post_000.content, main_div.text)
 
         self.check_right_side(soup)
