@@ -1,11 +1,5 @@
 {% extends 'blog/base.html' %}
 
-{% comment %} 
-{% if title %}
-{% block title %}{{ title }}{% endblock %}
-{% endif %}
-{% endcomment %}
-
 {% block content %}
     <h1 class="my-4">Blog   {% if category %}<span class="btn btn-light btn-md" style="cursor:auto">{{ category }}</span>{% endif %}</h1>
     {% if object_list.exists %}

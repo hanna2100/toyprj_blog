@@ -19,6 +19,9 @@ class PostList(ListView):
 class PostDetail(DetailView):
     model = Post
 
+    def get_queryset(self):
+        return Post.objects.order_by('-created')
+
     def get_context_data(self, **kwargs):
         context = super(PostDetail, self).get_context_data(**kwargs)
         context['category_list'] = Category.objects.all()
