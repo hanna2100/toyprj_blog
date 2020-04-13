@@ -1,6 +1,7 @@
 {% extends 'blog/base.html' %}
 {% block title %}{{object.title}} - Blog{% endblock %}
 {% block content %}
+<div id='post-card-{{ p.pk }}'>
     <!-- Title -->
     <h1 class="mt-4">{{ object.title }}</h1>
 
@@ -89,5 +90,5 @@
 
         </div>
     </div>
-
+</div>
 {% endblock %}
