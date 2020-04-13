@@ -25,11 +25,9 @@
     <!-- Post Content -->
     {{ object.content }}
     <br/>
-    <div id='post-card-{{ p.pk }}'>
     {% for tag in object.tags.all%}
-        <a href="{{ tag.get_absolute_url }}"#{{ tag }}  >
+        <a href="{{ tag.get_absolute_url }}">#{{ tag }} </a>
     {% endfor %}
-    </div>
     <hr>
 
     <!-- Comments Form -->
