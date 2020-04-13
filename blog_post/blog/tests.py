@@ -133,7 +133,6 @@ class TestView(TestCase):
     def test_post_list_with_post(self):
 
         tag_django = create_tag(name='django')
-
         #글이 생겼을 때
         post_000 = create_post(
             title = 'The first post',
@@ -180,12 +179,12 @@ class TestView(TestCase):
     #포스트 상세보기를 눌렀을 때
     def test_post_detail(self):
 
+        tag_django = create_tag(name='django')
         post_000 = create_post(
             title = 'The first post',
             content = 'Hello World. We are the world.',
             author = self.author_000,
         )
-        tag_django = create_tag(name="django")
         post_000.tags.add(tag_django)
         post_000.save()
 
@@ -195,11 +194,12 @@ class TestView(TestCase):
             author = self.author_000,
             category = create_category(name='python'),
         )
+        post_001.tags.add(tag_django)
+        post_001.save()
 
         self.assertGreater(Post.objects.count(), 0)
         post_000_url = post_000.get_absolute_url()
         self.assertEqual(post_000_url, '/blog/{}/'.format(post_000.pk))
-
 
         response = self.client.get(post_000_url)
         self.assertEqual(response.status_code, 200)
@@ -210,7 +210,6 @@ class TestView(TestCase):
         self.check_navbar(soup)
 
         body = soup.body
-
         main_div = body.find('div', id='main-div')
         self.assertIn(post_000.title, main_div.text)
         self.assertIn(post_000.author.username, main_div.text)
