@@ -40,7 +40,7 @@ def create_tag(name='nomal_tag'):
 class TestModel(TestCase):
     def setUp(self):
         self.client = Client()
-        self.author_000 = User.objects.create(username = 'Meg', password='nopassword')
+        self.author_000 = User.objects.create_user(username = 'Meg', password='nopassword')
 
     def test_category(self):
         category = create_category()
@@ -97,7 +97,8 @@ class TestView(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.author_000 = User.objects.create(username = 'Meg', password='nopassword')
+        self.author_000 = User.objects.create_user(username = 'Meg', password='nopassword')
+        self.user_nia = User.objects.create_user(username = 'Nia', password='nopassword')
 
     def check_navbar(self, soup):
         navbar = soup.find('div', id='navbar')
@@ -180,10 +181,13 @@ class TestView(TestCase):
     def test_post_detail(self):
 
         tag_django = create_tag(name='django')
+        category_python = create_category(name='python')
+
         post_000 = create_post(
             title = 'The first post',
             content = 'Hello World. We are the world.',
             author = self.author_000,
+            category = category_python,
         )
         post_000.tags.add(tag_django)
         post_000.save()
@@ -192,7 +196,6 @@ class TestView(TestCase):
             title = 'The second post',
             content = 'It is next Post!',
             author = self.author_000,
-            category = create_category(name='python'),
         )
         post_001.tags.add(tag_django)
         post_001.save()
@@ -217,11 +220,42 @@ class TestView(TestCase):
 
         self.check_right_side(soup)
 
-        #태그가 있는지 확안해보기 위해
-        # post_card_000 = main_div.find('div', id='post-card-{}'.format(post_000.pk))
-        # print(post_card_000.text)
+        #Tag 있는 지 확인
         self.assertIn('#django', main_div.text)
 
+        #category가 main_div에 있음
+        self.assertIn(category_python.name, main_div.text)
+        #edit 버튼이 로그인 하지 않으면 보이지 않음
+        self.assertNotIn('EDIT', main_div.text)
+
+        #로그인을 한 경우에
+        login_success = self.client.login(username = 'Meg', password='nopassword')
+        response = self.client.get(post_000_url)
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        main_div = soup.find('div', id='main-div')
+        btn_edit = main_div.find('button', id='btn-edit')
+
+        self.assertTrue(login_success)
+
+        #post.author와 로그인 한 사용자가 동일하면
+        self.assertEqual(post_000.author, self.author_000)
+
+        #Edit 버튼이 나옴
+        self.assertEqual('EDIT', btn_edit.text)
+
+        #동일하지 않으면 없다
+        login_success = self.client.login(username = 'Nia', password='nopassword')
+        response = self.client.get(post_000_url)
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        main_div = soup.find('div', id='main-div')
+
+        self.assertTrue(login_success)
+        #작성자는 로그인한 사람이 아닌 다른사람인지 확인
+        self.assertEqual(post_000.author, self.author_000)
+        #Edit 버튼이 안나옴
+        self.assertNotIn('EDIT', main_div.text)
 
 
     #특정 카테고리를 클릭했을 때

@@ -4,6 +4,12 @@
     <!-- Title -->
     <h1 class="mt-4">{{ object.title }}</h1>
 
+    {% if object.category%}
+        <span class="badge badge-pill badge-dark float-right">{{ object.category }}</span>
+    {% else %}
+        <span class="badge badge-pill badge-dark float-right">no category</span>
+    {% endif %}
+    
     <!-- Author -->
     <p class="lead">
         by
@@ -13,7 +19,11 @@
     <hr>
 
     <!-- Date/Time -->
-    <p>Posted on {{ object.created }}</p>
+    <p>Posted on {{ object.created }}
+        {% if request.user == object.author %} 
+            <button type="button" id='btn-edit' class="btn btn-outline-dark btn-sm float-right">EDIT</button>
+        {% endif %}
+    </p>
 
     <hr>
 
