@@ -424,4 +424,26 @@ class TestView(TestCase):
         # self.assertNotIn('Created', main_div.text)
         # self.assertNotIn('Author', main_div.text)
         
+    def test_new_comment(self):
+        post_000 = create_post(
+            title = 'The first post',
+            content = 'Hello World. We are the world.',
+            author = self.author_000,
+        )
 
+        login_success = self.client.login(username = 'Meg', password='nopassword')
+        self.assertTrue(login_success)
+
+        #서버에 뭔갈 날릴땐 post, 가져올땐 get
+        response = self.client.post(
+            post_000.get_absolute_url() + 'new_comment/',
+            {'text': 'a comment for test'}, 
+            follow = True
+        ) #follow는 redirect까지 포함해서 response 받는다는 뜻
+        
+        self.assertEqual(response.status_code, 200)
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        main_div = soup.find('div', id='main-div')
+        self.assertIn(post_000.title, main_div.text)
+        self.assertIn('a comment for test', main_div.text)

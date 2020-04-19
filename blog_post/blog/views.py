@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Post, Category, Tag
+from .forms import CommentForm
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -38,6 +39,8 @@ class PostDetail(DetailView):
         context = super(PostDetail, self).get_context_data(**kwargs)
         context['category_list'] = Category.objects.all()
         context['posts_without_category'] = Post.objects.filter(category=None).count()
+        context['comment_form'] = CommentForm()
+
         return context
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
@@ -88,3 +91,20 @@ class PostListByCateogory(ListView):
 
         # context['title'] = 'Blog - {}'.format(category.name)
         return context
+
+
+def new_comment(request, pk):
+    post = Post.objects.get(pk=pk)
+    
+    if request.method == 'POST':
+        commnet_form = CommentForm(request.POST)
+        if commnet_form.is_valid():
+            comment = commnet_form.save(commit = False) # post와 user을 채워야하므로 일단은 false
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+
+            return redirect(comment.get_absolute_url())
+
+    else:
+        return redirect('/blog/')
