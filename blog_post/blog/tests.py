@@ -213,6 +213,42 @@ class TestView(TestCase):
         post_card_000 = main_div.find('div', id='post-card-{}'.format(post_000.pk))
         self.assertIn('#django', post_card_000.text)
 
+    def test_pagination(self):
+
+        #포스트가 적은경우
+        for i in range(0, 3):
+            post = create_post(
+                title = 'The post No. {}'.format(i),
+                content = 'content {}'.format(i),
+                author = self.author_000,
+            )
+        
+        response = self.client.get('/blog/')
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        self.assertNotIn('Older', soup.body.text)
+        self.assertNotIn('Newer', soup.body.text)
+
+
+        #포스트가 많은경우
+        for i in range(3, 10):
+            post = create_post(
+                title = 'The post No. {}'.format(i),
+                content = 'content {}'.format(i),
+                author = self.author_000,
+            )
+        
+        response = self.client.get('/blog/')
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        self.assertIn('Older', soup.body.text)
+        self.assertIn('Newer', soup.body.text)
+
+
+
+
     #포스트 상세보기를 눌렀을 때
     def test_post_detail(self):
 
@@ -534,3 +570,4 @@ class TestView(TestCase):
         soup = BeautifulSoup(response.content, 'html.parser')
         self.assertNotIn('a first comment', soup.body.text)
         self.assertIn('i edited comment', soup.body.text)
+

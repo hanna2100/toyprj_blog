@@ -47,6 +47,9 @@ class Post(models.Model):
     #tag
     tags = models.ManyToManyField(Tag, blank=True) #many to many 에서는 null=true 쓰면 안됨
 
+    class Meta:
+        ordering = ['-created',]
+
     def __str__(self):
         return '{} :: {}'.format(self.title, self.author)
 

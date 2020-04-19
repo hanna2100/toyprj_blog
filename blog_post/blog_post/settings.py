@@ -141,6 +141,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 ACCOUNT_EMAIL_REQUIRED = True #이메일을 필수로 입력받게 함
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 LOGIN_REDIRECT_URL = '/blog/'
 
 # Static files (CSS, JavaScript, Images)
