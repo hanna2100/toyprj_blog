@@ -227,6 +227,7 @@ class TestView(TestCase):
         )
 
         comment_000 = create_comment(post_000, text='a first comment', author=self.user_nia)
+        comment_001 = create_comment(post_000, text='a second comment', author=self.author_000)
 
 
         post_000.tags.add(tag_django)
@@ -303,6 +304,14 @@ class TestView(TestCase):
         #Edit 버튼이 안나옴
         self.assertNotIn('EDIT', main_div.text)
 
+        comment_div = main_div.find('div', id='comment-list')
+        comment_000_div = comment_div.find('div', id='comment-id-{}'.format(comment_000.pk))
+        self.assertIn('edit', comment_000_div.text)
+        self.assertIn('delete', comment_000_div.text)
+
+        comment_001_div = comment_div.find('div', id='comment-id-{}'.format(comment_001.pk))
+        self.assertNotIn('edit', comment_001_div.text)
+        self.assertNotIn('delete', comment_001_div.text)
 
     #특정 카테고리를 클릭했을 때
     def test_post_list_by_category(self):
