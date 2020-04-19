@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Post, Category, Tag
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class PostList(ListView):
     model = Post
@@ -39,7 +40,7 @@ class PostDetail(DetailView):
         context['posts_without_category'] = Post.objects.filter(category=None).count()
         return context
 
-class PostCreate(CreateView):
+class PostCreate(LoginRequiredMixin, CreateView):
     model = Post
     fields = [
         'title', 'content', 'head_image', 'category', 'tags'
@@ -54,7 +55,7 @@ class PostCreate(CreateView):
             return redirect('/blog/')
 
 
-class PostUpdate(UpdateView):
+class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
     #fields = '__all__' 포스트에 있는거 다 수정하고 싶으면 이거 쓰면 됨. 하지만 우리는 날짜와 작성자를 바꾸면 안되기에 all을 쓰면 안됨
     fields = [
