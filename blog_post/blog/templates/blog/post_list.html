@@ -29,7 +29,7 @@
                     <p class="card-text">{{ p.content | truncatewords:50 }}</p>
                     <p>
                     {% for tag in p.tags.all %}
-                        <a href="{{ tag.get_absolute_url }}">#{{ tag }} </a>
+                        <a href="{{ tag.get_absolute_url }}" style="color:#0489B1">#{{ tag }} </a>
                     {% endfor %}
                     </p>
                     <br/>
