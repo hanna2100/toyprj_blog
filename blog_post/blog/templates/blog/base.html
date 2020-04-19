@@ -18,6 +18,7 @@
             type="image/png"
             sizes="16x16"
             href="{% static 'blog/_assets/img/favicon-16x16.png' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
     </head>
 
     <body>
@@ -96,8 +97,61 @@
                         </li>
                     </ul>
 
+                    <ul class="nav navbar-nav ml-auto">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a
+                                    class="nav-link dropdown-toggle"
+                                    data-toggle="dropdown"
+                                    href="#"
+                                    id="download">{{ user }}
+                                    <span class="caret"></span></a>
+                                <div class="dropdown-menu" aria-labelledby="download">
+                                    {% comment %} <a
+                                        class="dropdown-item"
+                                        target="_blank"
+                                        href="https://jsfiddle.net/bootswatch/8zet8yhz/">Open in JSFiddle</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="../4/lux/bootstrap.min.css" download="download">bootstrap.min.css</a>
+                                    <a class="dropdown-item" href="../4/lux/bootstrap.css" download="download">bootstrap.css</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="../4/lux/_variables.scss" download="download">_variables.scss</a> {% endcomment %}
+                                    <a class="dropdown-item" href="/accounts/logout/">Logout</a>
+                                </div>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+                                    Login
+                                </button>
+                            </li>
+                        {% endif %}
+                    </ul>
+
                 </div>
             </div>
+        </div>
+
+        <!-- Modal -->
+        {% load socialaccount %}
+        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Please Login</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <a role="button" class="btn btn-primary" href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i>Login with google</a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+            </div>
+        </div>
         </div>
 
         <div class="container">
