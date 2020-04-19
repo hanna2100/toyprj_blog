@@ -456,3 +456,41 @@ class TestView(TestCase):
         main_div = soup.find('div', id='main-div')
         self.assertIn(post_000.title, main_div.text)
         self.assertIn('a comment for test', main_div.text)
+
+    def test_delete_commet(self):
+        post_000 = create_post(
+            title = 'The first post',
+            content = 'Hello World. We are the world.',
+            author = self.author_000,
+        )
+
+        comment_000 = create_comment(post_000, text='a first comment', author=self.user_nia)
+        comment_001 = create_comment(post_000, text='a second comment', author=self.author_000)
+
+        self.assertEqual(Comment.objects.count(), 2)
+        self.assertEqual(post_000.comment_set.count(), 2)
+
+        # 제 3자로 로그인
+        login_success = self.client.login(username='Meg', password='nopassword')
+        self.assertTrue(login_success)
+        # 3자가 주소를 통해 본인 댓글이 아닌걸 지우려고 하면
+        response = self.client.get('/blog/delete_comment/{}/'.format(comment_000.pk), follow=True)
+        # 지워지면 안됨. 그대로 2개 유지
+        self.assertEqual(Comment.objects.count(), 2)
+        self.assertEqual(post_000.comment_set.count(), 2)
+
+        #본인이 로그인하면 지워져야함
+        login_success = self.client.login(username = 'Nia', password='nopassword')
+        self.assertTrue(login_success)
+        response = self.client.get('/blog/delete_comment/{}/'.format(comment_000.pk), follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(Comment.objects.count(), 1)
+        self.assertEqual(post_000.comment_set.count(), 1)
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        main_div = soup.find('div', id='main-div')
+
+        self.assertNotIn('Nia', main_div.text)
+
+
