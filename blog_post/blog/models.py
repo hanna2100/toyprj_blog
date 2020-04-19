@@ -40,7 +40,7 @@ class Post(models.Model):
     #이미지
     head_image = models.ImageField(upload_to='blog/%Y/%m/%d/', blank=True)
     #작성일, 작성자
-    created = models.DateTimeField()
+    created = models.DateTimeField(auto_now_add=True) #포스트가 생성될때 자동으로 타임필드를 채워줌
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     #카테고리
     category = models.ForeignKey(Category, blank=True, null=True, on_delete=models.SET_NULL)

@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Post, Category, Tag
-from django.views.generic import ListView, DetailView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
 class PostList(ListView):
     model = Post
@@ -39,13 +39,27 @@ class PostDetail(DetailView):
         context['posts_without_category'] = Post.objects.filter(category=None).count()
         return context
 
+class PostCreate(CreateView):
+    model = Post
+    fields = [
+        'title', 'content', 'head_image', 'category', 'tags'
+    ]
+
+    def form_valid(self, form): #원래 있던 함수 오버라이딩
+        current_user = self.request.user
+        if current_user.is_authenticated:
+            form.instance.author = current_user #폼 객체의 유저부분을 현재유저로 채우라는 뜻
+            return super(type(self), self).form_valid(form)
+        else:
+            return redirect('/blog/')
+
+
 class PostUpdate(UpdateView):
     model = Post
     #fields = '__all__' 포스트에 있는거 다 수정하고 싶으면 이거 쓰면 됨. 하지만 우리는 날짜와 작성자를 바꾸면 안되기에 all을 쓰면 안됨
     fields = [
         'title', 'content', 'head_image', 'category', 'tags'
     ]
-    exclude = ['created', 'author']
 
 class PostListByCateogory(ListView):
     
