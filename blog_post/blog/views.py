@@ -109,6 +109,16 @@ def new_comment(request, pk):
     else:
         return redirect('/blog/')
 
+class CommentUpdate(UpdateView):
+    model = Comment
+    form_class = CommentForm
+
+    def get_object(self, queryset=None):
+        comment = super(CommentUpdate, self).get_object()
+        if comment.author != self.request.user:
+            raise PermissionError("You don't have permission to edit comment.")
+        return comment
+
 def delete_comment(request, pk):
     comment = Comment.objects.get(pk=pk)
 

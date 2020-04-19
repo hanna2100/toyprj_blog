@@ -493,4 +493,44 @@ class TestView(TestCase):
 
         self.assertNotIn('Nia', main_div.text)
 
+    def test_edit_commet(self):
+        post_000 = create_post(
+            title = 'The first post',
+            content = 'Hello World. We are the world.',
+            author = self.author_000,
+        )
 
+        comment_000 = create_comment(post_000, text='a first comment', author=self.user_nia)
+        comment_001 = create_comment(post_000, text='a second comment', author=self.author_000)
+
+        #로그인 안할때
+        with self.assertRaises(PermissionError):
+            response = self.client.get('/blog/edit_comment/{}/'.format(comment_000.pk))
+
+        #로그인 매그
+        login_success = self.client.login(username = 'Meg', password='nopassword')
+        self.assertTrue(login_success)
+
+        with self.assertRaises(PermissionError):
+            response = self.client.get('/blog/edit_comment/{}/'.format(comment_000.pk))
+
+        #로그인 니아
+        login_success = self.client.login(username = 'Nia', password='nopassword')
+        self.assertTrue(login_success)
+
+        response = self.client.get('/blog/edit_comment/{}/'.format(comment_000.pk))
+        self.assertEqual(response.status_code, 200)
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        self.assertIn('Edit Comment : ', soup.body.h3)
+
+        response = self.client.post(
+            '/blog/edit_comment/{}/'.format(comment_000.pk),
+            {'text': 'i edited comment'},
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        self.assertNotIn('a first comment', soup.body.text)
+        self.assertIn('i edited comment', soup.body.text)
