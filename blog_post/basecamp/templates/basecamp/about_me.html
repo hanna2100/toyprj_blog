@@ -1,6 +1,16 @@
 {% extends 'basecamp/base_full.html' %}
+{% load static %}
 {% block content %}
     <div class="container">
-        <h1>About Me</h1>
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="my-4" id="blog-list-title">About Me</h1>
+                <h3 class="my-3">Hello. I'm Hannarim Jang.</h3>
+                <p1 class="my-2">Est ultricies integer quis auctor. Sed libero enim sed faucibus turpis in. Amet est placerat in egestas erat imperdiet. Tristique senectus et netus et malesuada fames ac. Volutpat sed cras ornare arcu dui vivamus arcu felis bibendum. Ultrices tincidunt arcu non sodales neque sodales ut. Dui id ornare arcu odio ut sem. Porttitor eget dolor morbi non arcu. Lacus vel facilisis volutpat est velit egestas dui id. Risus feugiat in ante metus dictum at tempor. Facilisi cras fermentum odio eu feugiat pretium nibh. Feugiat nisl pretium fusce id velit ut tortor pretium. Rhoncus est pellentesque elit ullamcorper dignissim. Aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis. Commodo elit at imperdiet dui. Nec feugiat in fermentum posuere urna. Sit amet luctus venenatis lectus magna. Varius sit amet mattis vulputate enim nulla aliquet porttitor lacus. Malesuada fames ac turpis egestas sed tempus urna et pharetra. Elit sed vulputate mi sit.</p1>
+            </div>
+            <div class="col-md">
+                <img class="img-fluid mt-5" src="{% static 'basecamp/images/my_picture.jpg' %}"/>
+            </div>
+        </div>
     </div>
 {% endblock %}
