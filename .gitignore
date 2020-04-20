@@ -1,5 +1,5 @@
 venv/
-
 .vscode/
-
+blog_post/_media/blog/2020
+blog_post/_media/markdownx/
 get-pip.py
