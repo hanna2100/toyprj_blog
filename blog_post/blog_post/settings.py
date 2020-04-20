@@ -154,7 +154,7 @@ LOGIN_REDIRECT_URL = '/blog/'
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '_meida')
+MEDIA_ROOT = os.path.join(BASE_DIR, '_media')
 
 from datetime import datetime
 MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d')
