@@ -32,15 +32,6 @@
                                     id="download">{{ user }}
                                     <span class="caret"></span></a>
                                 <div class="dropdown-menu" aria-labelledby="download">
-                                    {% comment %} <a
-                                        class="dropdown-item"
-                                        target="_blank"
-                                        href="https://jsfiddle.net/bootswatch/8zet8yhz/">Open in JSFiddle</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="../4/lux/bootstrap.min.css" download="download">bootstrap.min.css</a>
-                                    <a class="dropdown-item" href="../4/lux/bootstrap.css" download="download">bootstrap.css</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="../4/lux/_variables.scss" download="download">_variables.scss</a> {% endcomment %}
                                     <a class="dropdown-item" href="/accounts/logout/">Logout</a>
                                 </div>
                             </li>
@@ -55,4 +46,36 @@
 
                 </div>
             </div>
+        </div>
+
+        
+        <!-- Modal -->
+        {% load socialaccount %}
+        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Please Login</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a role="button" class="btn btn-primary" href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i> Login with Google</a>
+                        <hr>
+                        <a role="button" class="btn btn-primary" href="/accounts/login/"><i class="far fa-envelope"></i> Login with Email</a>
+                    </div>
+
+                    <div class="col-md-6">
+                        <a role="button" class="btn btn-warning" href="/accounts/signup/"><i class="far fa-envelope"></i> Sign Up with Email</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
         </div>
