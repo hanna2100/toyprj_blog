@@ -9,6 +9,7 @@
         Blog   
         {% if category %}<span class="btn btn-dark btn-sm" style="cursor:auto">{{ category }}</span>{% endif %}
         {% if tag %}<span class="btn btn-dark btn-sm" style="cursor:auto">#{{ tag }}</span>{% endif %}
+        {% if search_info  %}<span class="btn btn-dark btn-sm" style="cursor:auto">#{{ search_info }}({{object_list.count}})</span>{% endif %}
     </h1>
     {% if object_list.exists %}
         {% for p in object_list %}
